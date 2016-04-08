@@ -81,13 +81,6 @@ graphite_user:
     - require:
       - group: graphite_group
 
-/opt/graphite/storage/graphite.db:
-  file.managed:
-    - source: salt://graphite/files/graphite.db
-    - replace: False
-    - user: graphite
-    - group: graphite
-
 /opt/graphite/storage:
   file.directory:
     - user: graphite
@@ -95,6 +88,13 @@ graphite_user:
     - recurse:
       - user
       - group
+
+/opt/graphite/storage/graphite.db:
+  file.managed:
+    - source: salt://graphite/files/graphite.db
+    - replace: False
+    - user: graphite
+    - group: graphite
 
 {{ graphite.whisper_dir }}:
   file.directory:
@@ -145,6 +145,18 @@ local-dirs:
       admin_email: {{ graphite.admin_email }}
       admin_user: {{ graphite.admin_user }}
       admin_password: {{ graphite.admin_password }}
+
+
+# Create this manually because it does not seem to be created by pip install on
+# docker.  This is pretty odd because on a normal VM seems to create this
+# (albeit only with example file).
+/opt/graphite/conf:
+  file.directory:
+    - user: graphite
+    - group: graphite
+    - recurse:
+      - user
+      - group
 
 /opt/graphite/conf/storage-schemas.conf:
   file.managed:
