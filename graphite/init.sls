@@ -52,13 +52,7 @@ install-{{ fontpkg }}-on-amazon:
 
 install-graphite-apps:
   cmd.run:
-    # Added --upgrade --target=/ because docker does something strange that 
-    # causes it to be installed in pythons dist-packages directory.
-    # The upgrade flag allows pip to write to the /opt folder.
-    # This seems super dangerous for general use but since this machine will 
-    # be isolated, we can stand it for now.
-
-    - name: pip install --upgrade --target=/ -r /tmp/graphite_reqs.txt
+    - name: pip install -r /tmp/graphite_reqs.txt
     - unless: test -d /opt/graphite/webapp
     - require:
       - file: /tmp/graphite_reqs.txt
